@@ -1,0 +1,83 @@
+{% extends "admin/base.html" %}
+
+{% block subtitle %}{{ _('Feedback') }}{% endblock %}
+
+{% block secondary_content %}
+  <h2>{{ _('Feedback') }}</h2>
+  <p>{{ _('This page shows feedback submitted by visitors on dataset pages. Submissions are only visible here and are never displayed publicly.') }}</p>
+  <p>{{ _('Use the filter button next to a dataset to view feedback for a specific dataset. Click the trash icon to permanently delete a submission.') }}</p>
+{% endblock %}
+
+{% block primary_content_inner %}
+  <h1>{{ _('Feedback Submissions') }}</h1>
+
+  <p>{{ _('Total submissions:') }} <strong>{{ total_count }}</strong></p>
+
+  {% if package_id_filter %}
+    <div style="margin-bottom: 15px;">
+      <span class="label label-info">{{ _('Filtered by dataset:') }} {{ package_id_filter }}</span>
+      <a href="{{ h.url_for('feedback_admin.index') }}" class="btn btn-default btn-xs">
+        {{ _('Clear filter') }}
+      </a>
+    </div>
+  {% endif %}
+
+  {% if page.items %}
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>{{ _('Dataset') }}</th>
+          <th>{{ _('Author') }}</th>
+          <th>{{ _('Type') }}</th>
+          <th>{{ _('Reason') }}</th>
+          <th>{{ _('Date') }}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sub in page.items %}
+          <tr>
+            <td>
+              <a href="{{ h.url_for('dataset.read', id=sub.package_id) }}">
+                {{ sub.package_id[:12] ~ '...' }}
+              </a>
+              <a href="{{ h.url_for('feedback_admin.index', package_id=sub.package_id) }}"
+                 class="btn btn-default btn-xs" title="{{ _('Filter by this dataset') }}">
+                <i class="fa fa-filter"></i>
+              </a>
+            </td>
+            <td>
+              {{ sub.author_name or _('Anonymous') }}
+              {% if sub.author_email %}
+                <br><small><a href="mailto:{{ sub.author_email }}">{{ sub.author_email }}</a></small>
+              {% endif %}
+            </td>
+            <td>{{ sub.subject_type }}</td>
+            <td>{{ sub.reason }}</td>
+            <td>{{ h.render_datetime(sub.created_at) }}</td>
+            <td>
+              <form method="POST"
+                    action="{{ h.url_for('feedback_admin.delete', submission_id=sub.id) }}"
+                    style="margin: 0;"
+                    onsubmit="return confirm('{{ _('Are you sure you want to delete this submission?') }}');">
+                {{ h.csrf_input() }}
+                <button type="submit" class="btn btn-danger btn-xs" title="{{ _('Delete') }}">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="6" style="border-top: none; padding-top: 0;">
+              <div style="white-space: pre-wrap;">{{ sub.body }}</div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {{ page.pager() }}
+  {% else %}
+    <p class="empty">{{ _('No feedback submissions yet.') }}</p>
+  {% endif %}
+{% endblock %}

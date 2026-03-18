@@ -1,0 +1,6 @@
+{% ckan_extends %}
+
+{% block content_primary_nav %}
+  {{ super() }}
+  {{ h.build_nav_icon('feedback_admin.index', _('Feedback'), icon='comment') }}
+{% endblock %}

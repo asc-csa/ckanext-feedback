@@ -1,0 +1,4 @@
+feedback_js:
+  output: ckanext_feedback/%(version)s_feedback.js
+  contents:
+    - feedback.js
