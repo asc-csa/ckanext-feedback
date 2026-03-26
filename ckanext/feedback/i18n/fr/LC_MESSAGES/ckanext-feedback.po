@@ -41,6 +41,12 @@ msgstr "Soumission de commentaires supprimée."
 msgid "Feedback"
 msgstr "Commentaires"
 
+msgid "This page shows feedback submitted by visitors on dataset pages. Submissions are only visible here and are never displayed publicly."
+msgstr "Cette page énumère les commentaires laissés par les visiteurs sur les pages des jeux de données. Ces commentaires sont uniquement visibles sur cette page et ne sont jamais affichés publiquement."
+
+msgid "Use the filter button next to a dataset to view feedback for a specific dataset. Click the trash icon to permanently delete a submission."
+msgstr "Utilisez le bouton de filtre à côté d'un jeu de données pour consulter les commentaires le concernant. Cliquez sur l'icône de la corbeille pour supprimer définitivement un commentaire."
+
 msgid "Feedback Submissions"
 msgstr "Soumissions de commentaires"
 
