@@ -127,19 +127,22 @@ def _send_notification(
     from ckan.lib.mailer import mail_recipient
 
     dataset_title = pkg.get("title") or pkg.get("name")
-    subject = _("Dataset feedback: {title}").format(title=dataset_title)
+    subject = _("User sent feedback for {title}").format(title=dataset_title)
     mail_body = (
-        f"Dataset: {dataset_title}\n"
+        f"Hello,\n\nYou got feeback from {author_name or 'Anonymous'} ({author_email or 'Not provided'}), {subject_type}\n\n"
+		f"Dataset: {dataset_title}\n"
+        f"Reason for feeback: {reason}\n\n"
+        f"Feedback:\n{body}\n\n"
         f"URL: {h.url_for('dataset.read', id=pkg['name'], _external=True)}\n\n"
-        f"From: {author_name or 'Anonymous'}\n"
-        f"Email: {author_email or 'Not provided'}\n"
-        f"I am a: {subject_type}\n"
-        f"Reason: {reason}\n\n"
-        f"Feedback:\n{body}\n"
-    )
+		f"Have a good day\n"
+     )
 
     for email in config.email_recipients():
         try:
-            mail_recipient("CKAN Admin", email, subject, mail_body)
+            print("DEBUG: ckanext-feedback (sending)")
+            print(email)
+            print(subject)
+            print(mail_body)
+            mail_recipient("Open Data and Information Portal", email, subject, mail_body)
         except Exception:
             log.exception("Failed to send feedback notification to %s", email)
